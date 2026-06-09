@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Agent</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 { color: #0078d4; }
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            resize: vertical;
+        }
+        button {
+            margin-top: 10px;
+            padding: 12px 24px;
+            background: #0078d4;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover { background: #005a9e; }
+        #result {
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            white-space: pre-wrap;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>📧 Email Agent</h1>
+    <p>Descrivi cosa vuoi comunicare e l'agente genera un'email professionale.</p>
+    <textarea id="input" placeholder="Es: devo chiedere al mio capo un giorno di ferie per venerdì..."></textarea>
+    <br>
+    <button onclick="generateEmail()">Genera Email</button>
+    <div id="result"></div>
+
+    <script>
+        async function generateEmail() {
+            const input = document.getElementById('input').value;
+            if (!input) return alert('Scrivi qualcosa prima!');
+            
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('result').innerText = 'Generando...';
+
+            const response = await fetch('/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: input })
+            });
+
+            const data = await response.json();
+            document.getElementById('result').innerText = data.email;
+        }
+    </script>
+</body>
+</html>
